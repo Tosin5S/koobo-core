@@ -15,15 +15,12 @@ npm run dev
 
 ## Endpoints
 ```bash
-POST /register
+POST /api/v1/signup
 ```
-
 
 ```bash
-POST /login    // Gives back a token
+POST /api/v1/login    // Gives back a token
 ```
-
-
 
 ```bash
 GET /welcome   // send a token in the header with the x-access-token key
