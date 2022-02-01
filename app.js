@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 
-app.post("/register", async (req, res) => {
+app.post("/api/v1/signup", async (req, res) => {
   try {
     // Get user input
     const { firstName, lastName, email, password } = req.body;
@@ -58,7 +58,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/v1/login", async (req, res) => {
   try {
     // Get user input
     const { email, password } = req.body;
@@ -92,7 +92,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/welcome", auth, (req, res) => {
+app.get("/api/v1/welcome", auth, (req, res) => {
   res.status(200).send("Welcome to Koobo");
 });
 
