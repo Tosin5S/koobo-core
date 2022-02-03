@@ -30,7 +30,7 @@ app.post("/api/v1/signup", async (req, res) => {
       return res.status(409).send("User Already Exist. Please Login");
     }
 
-    //Encrypt user password
+    // Encrypt user password
     encryptedUserPassword = await bcrypt.hash(password, 10);
 
     // Create user in our database
@@ -97,7 +97,7 @@ app.get("/api/v1/welcome", auth, (req, res) => {
   res.status(200).send("Welcome to Koobo");
 });
 
-app.use("/api/password-reset", passwordReset);
+app.use("/api/v1/password-reset", passwordReset);
 
 // This should be the last route else any after it won't work
 app.use("*", (req, res) => {

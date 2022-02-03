@@ -7,7 +7,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 
-router.post("/", async (req, res) => {
+router.post("", async (req, res) => {
     try {
         const schema = Joi.object({ email: Joi.string().email().required() });
         const { error } = schema.validate(req.body);
@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
             }).save();
         }
 
-        const link = `http://localhost:8080/api/password-reset/${user._id}/${token.token}`;
+        const link = `http://localhost:8080/api/v1/password-reset/${user._id}/${token.token}`;
         await sendEmail(user.email, "Password reset", link);
 
         res.send("password reset link sent to your email account");
