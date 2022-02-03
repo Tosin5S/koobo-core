@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("./model/user");
+const passwordReset = require("./passwordReset");
 const auth = require("./middleware/auth");
 
 const app = express();
@@ -95,6 +96,8 @@ app.post("/api/v1/login", async (req, res) => {
 app.get("/api/v1/welcome", auth, (req, res) => {
   res.status(200).send("Welcome to Koobo");
 });
+
+app.use("/api/password-reset", passwordReset);
 
 // This should be the last route else any after it won't work
 app.use("*", (req, res) => {
