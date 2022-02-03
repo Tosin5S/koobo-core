@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const Joi = require("joi");
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 
 router.post("/", async (req, res) => {
     try {
@@ -49,7 +50,8 @@ router.post("/:userId/:token", async (req, res) => {
         });
         if (!token) return res.status(400).send("Invalid link or expired");
 
-        user.password = req.body.password;
+        // Encrypt user password
+        user.password = await bcrypt.hash(req.body.password, 10);
         await user.save();
         await token.delete();
 
