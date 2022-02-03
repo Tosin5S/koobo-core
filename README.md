@@ -31,5 +31,5 @@ POST /api/v1/password-reset/userId/token
 ```
 
 ```bash
-GET /welcome   // send a token in the header with the x-access-token key
+GET /api/v1/welcome   // send a token in the header with the x-access-token key
 ```
