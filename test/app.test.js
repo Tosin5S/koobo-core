@@ -1,25 +1,36 @@
 require("dotenv").config()
 const chai = require('chai')
 const chaiHttp = require('chai-http')
-const app = require('../index')
+const app = require('../app')
 const User = require('../model/user')
-const { assert, expect } = chai
+const { assert, expect, should } = chai
 const jwt = require('jsonwebtoken')
+const { json } = require("express/lib/response")
+// const supertest = require('supertest')
 
-
+// const apptest = supertest(http.createServer(app.callback()))
 chai.use(chaiHttp)
 
 const USER = {
-     first_name : "TEST",
-     last_name : "TEST",
+     firstName : "TEST",
+     lastName : "TEST",
      email : "test@test.com",
      password : "test123"
+}
+const USER1 = {
+  firstName : "TEST1",
+  lastName : "TEST1",
+  email : "test1@test.com",
+  password : "test123123"
 }
 // TODO
 // 1. Test signup route
 // 2. Test login route
 // 3. Test welcome route
 // 4. Test random route
+before(done => {
+  done()
+})
 describe('Authentication', () => {
     /**
      * Test Signup Route 
@@ -34,7 +45,6 @@ describe('Authentication', () => {
             .send(USER)
             .then(res => {
                 expect(res).to.have.status(201)
-                assert.equal(res.body.json, USER)
                 done()
             })
             .catch(err => console.log('POST /api/v1/signup', err.message));
@@ -46,7 +56,7 @@ describe('Authentication', () => {
             .send(USER)
             .then(res => {
                 expect(res).to.have.status(409);
-                assert.equal(res.body.text, "User Already Exist. Please Login")
+                assert.equal(res.text, "User Already Exist. Please Login")
                 done()
             })
             .catch(err => console.log('POST /api/v1/signup', err.message))
@@ -61,10 +71,10 @@ describe('Authentication', () => {
             chai
               .request(app)
               .post('/api/v1/login')
-              .send(USER.email, USER.password)
+              .send(USER1.email, USER1.password)
               .then(res => {
                 expect(res).to.have.status(400)
-                assert.equal(res.body.text, 'Invalid Credentials')
+                assert.equal(res.text, 'Invalid Credentials')
                 done()
               })
               .catch(err => console.log('POST /api/v1/login', err.message));
@@ -76,7 +86,7 @@ describe('Authentication', () => {
               .send(USER.email, USER.password)
               .then(res => {
                 expect(res).to.have.status(200)
-                assert.equal(res.body.json, USER)
+                assert.equal(res.json, USER)
                 done()
               })
               .catch(err => console.log('POST /api/v1/login', err.message));
@@ -86,12 +96,12 @@ describe('Authentication', () => {
               .request(app)
               .post('/api/v1/login')
               .send({
-                email: 'test@test.com',
-                password: 'password111'
+                email: USER.email,
+                password: USER1.password
               })
               .then(res => {
                 expect(res).to.have.status(400)
-                assert.equal(res.body.text, 'Invalid Credentials')
+                assert.equal(res.text, 'Invalid Credentials')
                 done()
               })
               .catch(err => console.log('POST /api/v1/login', err.message));
@@ -171,4 +181,9 @@ describe('Authentication', () => {
      * Test Random Route
      * Method: GET
      */
+     after(done => {
+      User.findOneAndDelete({ where: { email: USER.email } }).then(() => {
+        done()
+      })
+    })
 })
